@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./query.css";
-import Input from "./common/input";
+import AnswersTab from "./common/answersTab";
 
 class Query extends Component {
   state = {
@@ -48,10 +48,11 @@ class Query extends Component {
   };
 
   handleShow(event, query) {
-    // console.log(event);
+    console.log(event);
+    //var ele = ReactDOM.getElementById(query.id + "-show-btn");
     let ele = document.getElementById(query.id + "-show-btn");
     ele.hidden = !ele.hidden;
-    // console.log(query);
+    console.log(query);
   }
 
   handleAnswer = e => {
@@ -98,34 +99,18 @@ class Query extends Component {
                       >
                         Show
                       </button>
-                      <div id={query.id + "-show-btn"} hidden="hidden">
-                        <Input
-                          onChange={e => this.handleAnswer(e)}
-                          value={this.state.submittedAnswer}
-                          name="answer"
-                          id={query.id + "submit-answer"}
-                        />
-                        <button
-                          onClick={() => this.handleSubmit(query.id)}
-                          className="btn btn-primary btn-sm"
-                        >
-                          Submit
-                        </button>
-                        {query.answers.map(ans => {
-                          return (
-                            <div key={ans.answeredBy}>
-                              <ul>
-                                <li>
-                                  By : {ans.answeredBy}
-                                  <div className="m-1 p-1">
-                                    <i>{ans.answer}</i>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          );
-                        })}
-                      </div>
+
+                      <AnswersTab
+                        query={query}
+                        hidden="hidden"
+                        inputParams={{
+                          onChange: e => this.handleAnswer(e),
+                          value: this.state.submittedAnswer,
+                          name: "answer",
+                          id: query.id + "submit-answer-input"
+                        }}
+                        onClick={() => this.handleSubmit(query.id)}
+                      />
                     </div>
                   </div>
                 </div>
