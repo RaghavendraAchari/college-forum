@@ -14,8 +14,8 @@ class LogInForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log("Submitted");
-    this.props.history.push("/home");
+    this.props.props.history.push("/home");
+    this.props.onLogin(this.state.account.username);
   };
   render() {
     const { account } = this.state;

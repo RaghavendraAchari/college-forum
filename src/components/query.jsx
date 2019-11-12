@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./query.css";
 import AnswersTab from "./common/answersTab";
+import Input from "./common/input";
+import ShowHideButton from "./common/button";
 
 class Query extends Component {
   state = {
@@ -44,7 +46,8 @@ class Query extends Component {
       }
     ],
 
-    submittedAnswer: ""
+    submittedAnswer: "",
+    newQuery: ""
   };
 
   handleShow(event, query) {
@@ -61,6 +64,12 @@ class Query extends Component {
     console.log("Writing answer");
   };
 
+  handleQuestion = e => {
+    const query = e.target.value;
+    this.setState({ newQuery: query });
+    console.log("Writing query");
+  };
+
   handleSubmit = id => {
     console.log("Answer submited");
     const queries = [...this.state.queries];
@@ -70,13 +79,50 @@ class Query extends Component {
       answer: this.state.submittedAnswer
     });
 
+    this.setState({ queries, submittedAnswer: "" });
+  };
+
+  handleQuestionSubmit = () => {
+    const newQuery = this.state.newQuery;
+    const newQueryObj = {
+      id: "12ewdsfdwfwe" + newQuery.substring(0, newQuery.length / 2),
+      title: newQuery,
+      publisher: "Smith",
+      answers: []
+    };
+
+    const queries = [newQueryObj, ...this.state.queries];
     this.setState({ queries });
   };
+
   render() {
     const { queries } = this.state;
     return (
       <div>
-        <h1>Queries</h1>
+        <div className="row">
+          <div className="col-sm-12 m-1 p-2">
+            <div className="card">
+              <div className="card-body">
+                <Input
+                  name="newQuery"
+                  id="newQuery"
+                  label="I have something to ask.."
+                  placeholder="Type your query"
+                  onChange={this.handleQuestion}
+                  value={this.state.newQuery}
+                />
+                <button
+                  onClick={this.handleQuestionSubmit}
+                  className="btn btn-danger btn-sm m-1"
+                >
+                  Ask Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h1>Submitted Queries</h1>
 
         {queries.length && <p>There are {queries.length} queries.</p>}
         {queries.length === 0 && <p>There are no queries.</p>}
@@ -93,12 +139,11 @@ class Query extends Component {
                       <p className="card-text">
                         Answers : {query.answers.length}
                       </p>
-                      <button
-                        onClick={e => this.handleShow(e, query)}
-                        className="btn btn-danger btn-sm m-1"
-                      >
-                        Show
-                      </button>
+                      <ShowHideButton
+                        onClick={e => {
+                          this.handleShow(e, query);
+                        }}
+                      />
 
                       <AnswersTab
                         query={query}
